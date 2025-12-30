@@ -1,0 +1,26 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT}}
+          script: |
+            cd /var/www/Contrib
+            git pull origin main
+            docker stop fastapi-1 || true
+            docker rm fastapi-1 || true
+            docker build -t fastapi-1 .
+            docker run -d --name fastapi-1 --env-file .env fastapi-1
