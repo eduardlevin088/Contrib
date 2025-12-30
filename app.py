@@ -25,10 +25,10 @@ def home(request: Request):
     )
 
 
-# @app.get("/health")
-# def health_check():
-#     """Health check endpoint"""
-#     return {"status": "healthy", "app": settings.APP_NAME}
+@app.get("/health")
+def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy", "app": config.APP_NAME}
 
 
 if __name__ == "__main__":
